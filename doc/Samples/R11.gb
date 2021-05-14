@@ -1,0 +1,54 @@
+LOCUS       R11                     1358 bp    DNA     linear   UNK 21-JAN-2021
+DEFINITION  .
+ACCESSION   R11
+VERSION     R11
+KEYWORDS    .
+SOURCE      
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     CDS             complement(1356..1358)
+                     /label="Rep101"
+     misc_feature    312..317
+                     /label="G1218K, E1219Q"
+     terminator      863..890
+                     /label="T7Te terminator"
+     Non-coding_RNA  1081..1100
+                     /label="Spacer"
+     misc_RNA        1101..1176
+                     /label="gRNA scaffold"
+     misc_feature    complement(690..713)
+                     /label="Cas9 -> SpG 3'"
+     misc_feature    63..68
+                     /label="D1135L, S1136W"
+     misc_feature    1..767
+                     /label="SpG"
+     misc_feature    663..671
+                     /label="R1335Q, T1337R"
+     terminator      776..847
+                     /label="rrnB T1 terminator"
+ORIGIN
+        1 gaaattcgga caagcttatt gctcgtaaaa aagactggga tccaaagaaa tatggtggtt
+       61 ttctgtggcc aacggtagct tattcagtcc tagtggttgc taaggtggaa aaagggaaat
+      121 cgaagaagtt aaaatccgtt aaagagttac tagggatcac aattatggaa agaagttcct
+      181 ttgaaaaaaa tccgattgac tttttagaag ctaaaggata taaggaagtt aaaaaagact
+      241 taatcattaa actacctaaa tatagtcttt ttgagttaga aaacggtcgt aaacggatgc
+      301 tggctagtgc caaacagtta caaaaaggaa atgagctggc tctgccaagc aaatatgtga
+      361 attttttata tttagctagt cattatgaaa agttgaaggg tagtccagaa gataacgaac
+      421 aaaaacaatt gtttgtggag cagcataagc attatttaga tgagattatt gagcaaatca
+      481 gtgaattttc taagcgtgtt attttagcag atgccaattt agataaagtt cttagtgcat
+      541 ataacaaaca tagagacaaa ccaatacgtg aacaagcaga aaatattatt catttattta
+      601 cgttgacgaa tcttggagct cccgctgctt ttaaatattt tgatacaaca attgatcgta
+      661 aacagtatcg ctctacaaaa gaagttttag atgccactct tatccatcaa tccatcactg
+      721 gtctttatga aacacgcatt gatttgagtc agctaggagg tgactgacca ggcatcaaat
+      781 aaaacgaaag gctcagtcga aagactgggc ctttcgtttt atctgttgtt tgtcggtgaa
+      841 cgctctctac tagagtcaca ctggctcacc ttcgggtggg cctttctgcg tttataatat
+      901 actcctaaat taacttttaa agcaatgaaa atagtgaaca ttataactgt tgtgtaacag
+      961 aatgcaatta gcatattact gttacacaaa ttagtacagt ttctatgttt tgacatacat
+     1021 ttgatgaaaa ttgtacataa tttatgtgaa aaaaatcaca acaaacatgc tacaattagt
+     1081 tgagaccagt ctaggtctcg gttttagagc tagaaatagc aagttaaaat aaggctagtc
+     1141 cgttatcaac ttgaaaaagt ggcaccgagt cggtgctttt tttggagatc tgtccatacc
+     1201 catggattct tcgtctgttt ctactccatc agtctgacga ccaagagagc cataaacacc
+     1261 aatagcctta acatcatccc catatttatc caatattcgt tccttaattt catgaacaat
+     1321 ctgatatcct gatagataca agagccataa gaacctca
+//

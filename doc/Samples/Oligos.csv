@@ -1,0 +1,79 @@
+Name	Sequence	Purpose	Received
+V1	gggttccgcgcacatttcccgcgcgcccagctgtctaggg		x
+V2	ggctcttgtatctatcagtgcacaaatttaaatcgtaattattggggacccctg		x
+V3	aattacgatttaaatttgtgcactgatagatacaagagccataagaacct		x
+V4	ccctagacagctgggcgcgcgggaaatgtgcgcggaaccc		x
+V5	tactttagtcagttccgcagctgacgaaagtccaagggtttattgt		x
+V6	gagtatttcttatccatttttgcctcc		x
+V7	gagtgatatcgaattcggaggc		x
+V8	Ttggatcccagtcttttttacgagcaataagcttgtccgaatttc		x
+V9	tcggacaagcttattgctcgtaaaaaagactgggatccaAAGaaatatggt		x
+V10	atggctcttgtatctatcaggatatcagattgttcatgaaattaaggaacgaatattg		x
+V11	ttcatgaacaatctgatatcctgatagatacaagagccataagaacctca		x
+V12	aacccttggactttcgtcagctgcggaactgactaaagtagtgag		x
+V13	a*g*cgagaatggctgcgccatgcggacgatcgtgtcatagaccgcCAAgtcaccatggggatggtatttaccgattacgtcaccaacgaca		x
+V14	aggaattggggatcggaattccaattaggatccttatcaacgtttgaattttg		x
+V15	gtttgttcagccaacgatcgccagaaaagaggcctcccga		x
+V16	tcgggaggcctcttttctggcgatcgttggctgaacaaacaga		x
+V17	ctagtatctccttcttaaatctataatacaaacagaccagattgtctgtttgt		x
+V18	ctggtctgtttgtattatagatttaagaaggagatactagatgtctgagctg		x
+V19	catctcgaggcatgcctgcattatctgtgccccagtttgctagg		x
+V20	 cagctcagacatctagtatctccttcttaaattcagaccggaaagcacatccgg		x
+V21	tcagaccggaaagcacatccggatttaagaaggagatactagatgtctgagctg		x
+V22	AGTGTCCGGTTTGATAGG		x
+V23	TCACTAGTTCTTTGACTACCG		x
+V24	ATACACATGCCAATTCAGG		x
+V25	TCTGCAAAGTGATTGCGC		x
+V26	AGCAACTGGAAACGCC		x
+V27	TACGGAAGGATCTGAGGT		x
+V28	ccaatattcgttccttaatttcatgaacaatctgatatc		x
+V29	gatatcagattgttcatgaaattaaggaacgaatattgg		x
+V30	TTTTCTGTGGCCAACGGT		x
+V31	CGGTGCTCAACGGGAATC		x
+V32	AATCAGACAACTCAAAAGGG		x
+V33	GATCCCTAGTAACTCTTTAAC		x
+V34	GCTAGCCAAGAAGAATTTTATAAATT		x
+V35	AAACGATTAATATCTAATTCTTGGTC		x
+V36	TCTCTATCATTGATAGAGTGATATCG		x
+V37	TATCAAAGTTTGTCATGCGTTCA		x
+V38	GGATGTTGGTTGCCATAC		x
+V39	CCATCCCCATGGTGACTT		x
+V40	TCGTGTCATAGACCGCCA		x
+V41	CATTCATTGGCACTTCTACTCCG		x
+V42	A*C*ATAACGCCACCGAATACAGTCTGGTGTTAATGGATGAGATCGAGCGTGGAACGTCCACCTACGATGGTCTGTCGCTGGCGTGGGCGTG	MutS	x
+V43	TATCGCCAACCCGCTGAA	MutS	x
+V44	TAGGTGGACGTTCCACGCT	MutS	x
+V45	AGTCTGGTGTTAATGGATGAGATCGA	MutS	x
+V46	CAGAGCTTCGACCGCAGGC	MutS	x
+V47	A*C*ATAACGCCACCGAATACAGTCTGGTGTTAATGGATGAGATCGGGCGTGGAACGTCCACCTACGATGGTCTGTCGCTGGCGTGGGCGTG	MutS	x
+V48	TAGGTGGACGTTCCACGCC	MutS	x
+V49	GTCTGGTGTTAATGGATGAGATCGG	MutS	x
+V50	ggacgcccgccataaactgccaggaattggggatcggaatTTACCATCACGGAAAAAGG	pAV208	x
+V51	agtatctccttcttaaatctctagGCCTCCGAATTCGATATC	pAV208	x
+V52	tatcgaattcggaggcCTAGAGATTTAAGAAGGAGATACTAG	pAV208	x
+V53	agtttaggttaggcgccatgcatctcgaggcatgcctgcaTTCTGGAATTTGGTACCG	pAV208	x
+V54	ggaattggggatcggaat	Screen KL	x
+V55	CATGCATCTCGAGGCATG	Screen KL	x
+V56	gctctctagggcggcggaAGCGGCCGCTGCAGGGAG	pAV209-210	x
+V57	tagcataatacctagggctgagctagccgtaaaGAATTCAGCGAAAAGCAGGTGTTCCAAGGCACCT	pAV209-210	x
+V58	tagcacaatccctaggactgagctagctgtcaaGAATTCAGCGAAAAGCAGGTGTTCCAAGGCACCT	pAV209-210	x
+V59	tgaattctttacggctagctcagccctaggtattatgctagcAGAGATTTAAGAAGGAGATACTAGA	pAV209-210	x
+V60	tgaattcttgacagctagctcagtcctagggattgtgctagcAGAGATTTAAGAAGGAGATACTAGA	pAV209-210	x
+V61	tcgctgccgcttcctttgcggctgcctcctttgccgccgcttctttggcggcggcctctgccagTCTGTGCCCCAGTTTGCT	pAV209-210	x
+V62	gcggcggcaaaggaggcagccgcaaaggaagcggcagcgaaggaagctgcggccaaagcggcaGCAGGTGAAGAAGACAACA	pAV209-210	x
+V63	ctccctgcagcggccgctTCCGCCGCCCTAGAGAGC	pAV209-210	x
+V64	CTTTTCGCtgaattctttacgg	pAV209-210	x
+V65	CTCCCTGCAGCGGCCGCTt	pAV209-210	x
+V66	G*A*GGCCAATTTCACGACCTACATCTTCCAGTGTTGCCGCTTCGTCCCCCAGCAAACCGAATCGACGTGCCAGCACTTCACGCTGTTTGGC	RpoS-CpxR	x
+V67	ACGACCATTCTCGGTTTT	RpoS-CpxR	x
+V68	GATTCGGTTTGCTGGGGG	RpoS-CpxR	x
+V69	CAGTGTTGCCGCTTCGTC	RpoS-CpxR	x
+V70	GATTCGCCAGACGATTGAACGG	RpoS-CpxR	x
+V71	A*G*ATGCTTACTTACTCGCGGAACAGCGCTTCGATATTCAGCCCCGGCGTTTGCAGGATTTCGCGCAAACGGCGCAGGCCTTCAACCTGAA	RpoS-CpxR	x
+V72	CGAAATCCTGCAAACGCC	RpoS-CpxR	x
+V73	GCGCTTCGATATTCAGCCCCG	RpoS-CpxR	x
+V74	C*T*GTCATTATGTTGACGGCGCGCGGCAGTGAACTTGATCGCGTTCACGGCCTTGAGCTGGGCGCAGATGACTATCTCCCGAAACCGTTTA	RpoS-CpxR	x
+V75	TGCCCAACACTTCCTGGC	RpoS-CpxR	x
+V76	GTGAACTTGATCGCGTTCA	RpoS-CpxR	x
+V77	CGCCCAGCTCAAGGCCGT	RpoS-CpxR	x
+V78	AAAATCTTTCTGTCGCGATTCA	RpoS-CpxR	x
