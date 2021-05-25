@@ -14,6 +14,11 @@ class record:
 
     def __repr__(self):
         return f'Clown record with {len(self.oligos)} oligos, {len(self.sequences)} sequences.'
+
+    def fragmentize(self, name):
+        '''Figure out if a parameter is a fragment name or a raw fragment variable, and returns the fragment.'''
+        sequence = self.sequences[name] if type(name) == str else name
+        return sequence
      
     ### Plotting
     def to_graphic_record(self, sequence, topology):
@@ -89,16 +94,17 @@ class record:
         else:
             return dseq
 
-    def write_gb(self, fragment, filename=None, folder='.'):
+    def write_gb(self, name, filename=None, folder='.'):
         '''Write a sequence to a gb file.'''
         if not filename:
-            filename = fragment
+            filename = name
         fullname = str(pathlib.Path(folder) / filename) + '.gb'
 
-        if type(fragment) == pydna.dseqrecord:
+        fragment = self.fragmentize(name)
+        if type(fragment)==Dseqrecord:
+            if fragment.locus == 'name':
+                fragment.locus = filename if filename else name # Set the locus variable to the fragment's name
             fragment.write(fullname, f='gb')
-        elif type(fragment) == str:
-            self.sequences[fragment].write(fullname, f='gb')
         else:
             print ('Input should be Dseqrecord or String')
     
