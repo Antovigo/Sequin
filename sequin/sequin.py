@@ -101,7 +101,8 @@ class record:
         fullname = str(pathlib.Path(folder) / filename) + '.gb'
 
         fragment = self.fragmentize(name)
-        if type(fragment)==Dseqrecord:
+        print(type(fragment))
+        if type(fragment)==pydna.contig.Contig:
             if fragment.locus == 'name':
                 fragment.locus = filename if filename else name # Set the locus variable to the fragment's name
             fragment.write(fullname, f='gb')
