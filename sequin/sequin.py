@@ -280,7 +280,7 @@ class record:
     def pcr(self, template, F, R, name=None,
             verbose=config.verbose, lim=config.min_primer_length):
         '''Simulate a polymerase chain reaction.'''
-        sequence = self.sequences[template] if type(template) == str else template
+        sequence = self.fragmentize(sequence)
        
         pr = pydna.primer.Primer
         oF = pr(self.oligos[F]) if type(F)==str else pr(F)
@@ -409,8 +409,12 @@ class record:
         
     def ligate(self, fragments, name=None):
         '''Simulate ligation. Fragments can be either sequences or names.'''
-        fragments_seq = [pydna.all.Dseqrecord(self.sequences[i]) if type(i)==str 
-                         else pydna.all.Dseqrecord(i) for i in fragments]
+        if type(fragments) != list:
+            print ('Fragments must be supplied as a list of either names or sequences')
+            return
+
+        fragments_seq = [self.fragmentize(i) for i in fragments]
+        
         # Add reversed versions of all the fragments
         fragments_seq_rev = [i.reverse_complement() for i in fragments_seq]
         fragments_u = fragments_seq + fragments_seq_rev
