@@ -102,7 +102,7 @@ class record:
 
         fragment = self.fragmentize(name)
         print(type(fragment))
-        if type(fragment)==pydna.contig.Contig:
+        if type(fragment) in [pydna.contig.Contig, pydna.dseqrecord.Dseqrecord]:
             if fragment.locus == 'name':
                 fragment.locus = filename if filename else name # Set the locus variable to the fragment's name
             fragment.write(fullname, f='gb')
@@ -280,7 +280,7 @@ class record:
     def pcr(self, template, F, R, name=None,
             verbose=config.verbose, lim=config.min_primer_length):
         '''Simulate a polymerase chain reaction.'''
-        sequence = self.fragmentize(sequence)
+        sequence = self.fragmentize(template)
        
         pr = pydna.primer.Primer
         oF = pr(self.oligos[F]) if type(F)==str else pr(F)
