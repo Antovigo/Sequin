@@ -20,6 +20,17 @@ class record:
         sequence = self.sequences[name] if type(name) == str else name
         return sequence
      
+    def primerize(self, oligo):
+        pr = pydna.primer.Primer
+
+        if type(oligo) == str:
+            if oligo in self.oligos.keys():
+                return pr(self.oligos[oligo]) # Called by name
+            else:
+                return pr(oligo) # Direct sequence input
+        else:
+            return pr(oligo) # Just in case
+
     ### Plotting
     def to_graphic_record(self, sequence, topology):
         '''Make a graphic record from a sequence.'''
@@ -283,8 +294,8 @@ class record:
         sequence = self.fragmentize(template)
        
         pr = pydna.primer.Primer
-        oF = pr(self.oligos[F]) if type(F)==str else pr(F)
-        oR = pr(self.oligos[R]) if type(R)==str else pr(R)
+        oF = self.primerize(F)
+        oR = self.primerize(R)
         oF.name = F
         oR.name = R
         amplicon = pydna.all.pcr(oF, oR, sequence, limit=lim)
