@@ -168,13 +168,18 @@ class record:
             sequence.features = cleaned
             return sequence
             
-    def new_feature(self, sequence, location, strand, name, feature_type):
+    def new_feature(self, sequence, location, strand, name, feature_type, force=False):
         '''Add a custom feature to a sequence.'''
         feature_location = Bio.SeqFeature.FeatureLocation(location[0], location[1], strand)
         new_feature = Bio.SeqFeature.SeqFeature(feature_location, type=feature_type)
         new_feature.qualifiers['label'] = [name]
 
-        self.sequences[sequence].features.append(new_feature)
+        existing_locations = [i.location for i in self.sequences[sequence].features]
+        if (not force) and (feature_location in existing_locations):
+            print('An identical feature is already present at this location. Skipping.')
+            return
+        else:
+            self.sequences[sequence].features.append(new_feature)
 
     def list_features(self, name):
         '''List features of a sequence.'''
@@ -241,16 +246,18 @@ class record:
             protein = sequence[i:-endpoint].translate()
             stop = i+(protein.seq.find('*')+1)*3
             if stop-i >= min_length:
-                if strand == +1:
-                    orfs.append((i,stop))
-                else:
-                    orfs.append((len(sequence)-stop, len(sequence)-i))
-
+                orfs.append((i,stop))
+        
         # Filter for the longest ORFs if greedy is enabled
         if greedy:
             stops = set([i[1] for i in orfs])
             longest = {stop:max([i[1]-i[0] for i in orfs if i[1]==stop]) for stop in stops}
             orfs = [i for i in orfs if i[1]-i[0]==longest[i[1]]]
+
+        # Reverse the orfs if looking at the -1 strand
+        if strand == -1:
+            l = len(sequence)
+            orfs = [(l-i[1], l-i[0]) for i in orfs]
 
         return orfs
 
