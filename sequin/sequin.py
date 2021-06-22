@@ -220,9 +220,15 @@ class record:
         return Bio.SeqUtils.nt_search(sequence, motif)[1:]
 
 
-    def find_orfs(self, target, strand, min_length=300, start_codon='ATG'):
-        '''Detect ORFs in the strand. Returns the first and last nucleotides' coordinates.'''
+    def find_orfs(self, target, strand, min_length=300, start_codon='ATG', greedy=True):
+        '''Detect ORFs in the strand. Returns the first and last nucleotides' coordinates.
+        Greedy mode will only return the longest ORF associated with each stop codon.'''
         sequence = self.sequences[target] if type(target) == str else target
+        
+        # Check strand
+        if strand not in [-1,1]:
+            raise Exception("Strand must be either -1 and +1")
+
         if strand==-1: sequence = sequence.reverse_complement()
 
         # Find start codons
@@ -239,6 +245,13 @@ class record:
                     orfs.append((i,stop))
                 else:
                     orfs.append((len(sequence)-stop, len(sequence)-i))
+
+        # Filter for the longest ORFs if greedy is enabled
+        if greedy:
+            stops = set([i[1] for i in orfs])
+            longest = {stop:max([i[1]-i[0] for i in orfs if i[1]==stop]) for stop in stops}
+            orfs = [i for i in orfs if i[1]-i[0]==longest[i[1]]]
+
         return orfs
 
     def find_primers(self, target, oligos=None,
