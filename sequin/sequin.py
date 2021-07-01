@@ -5,12 +5,14 @@ import Bio
 import dna_features_viewer
 import pathlib
 import sequin.config as config
+import os
 
 class record:
-    def __init__(self, oligos=dict(), sequences=dict()):
+    def __init__(self, oligos=dict(), sequences=dict(), folder=''):
         '''Create a new record. Oligos and sequences dicts can be provided already.'''
         self.oligos = oligos
         self.sequences = sequences
+        self.folder = folder
 
     def __repr__(self):
         return f'Clown record with {len(self.oligos)} oligos, {len(self.sequences)} sequences.'
@@ -96,6 +98,17 @@ class record:
                     fontdict={'weight': 'bold'}, long_form_translation=False)
         
     #### I/O
+    def find_gb(self, name, folder=None, extension='.gb'):
+        '''Find a gb file that matches the name (with .gb extension), and import it as a sequence.'''
+        if not folder:
+            folder = self.folder
+        for root, dirs, files in os.walk(folder):
+            if name+extension in files:
+                path = os.path.join(root, name+extension)
+                print(f'Adding {path} as {name}.')
+                return self.add_gb(path, name=name)
+        print(f'No matching file found with extension {extension}')
+
     def add_gb(self, filename, name=None, circular=True):
         '''Import a gb file to the sequence dict.'''
         seq = next(Bio.SeqIO.parse(filename, 'gb'))
