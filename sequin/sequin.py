@@ -341,10 +341,13 @@ class record:
         oR.name = R
         amplicon = pydna.all.pcr(oF, oR, sequence, limit=lim)
         
+        tmF = self.tm(amplicon.forward_primer.footprint)
+        tmR = self.tm(amplicon.reverse_primer.footprint)
+        
         if name and type(template)==str:
-            print(f'{name}\t(...)\t{template}\t{F}\t{R}\t{len(amplicon)}')
+            print(f'{name}\t{template}\t{F}\t{R}\t{len(amplicon)}/{tmF}/{tmR}')
         else:
-            print(f'{template} + {F} + {R} = {len(amplicon)} bp.')
+            print(f'{template} + {F} + {R} = {len(amplicon)} bp, {tmF}-{tmR}°C.')
         
         # Remove primer features
         self.clean_features(amplicon, junk=[], junk_types=['primer_bind'], verbose=False) 
