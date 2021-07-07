@@ -8,11 +8,12 @@ import sequin.config as config
 import os
 
 class record:
-    def __init__(self, oligos=dict(), sequences=dict(), folder=''):
+    def __init__(self, oligos=dict(), sequences=dict()):
         '''Create a new record. Oligos and sequences dicts can be provided already.'''
         self.oligos = oligos
         self.sequences = sequences
-        self.folder = folder
+        self.folder = pathlib.Path(config.folder)
+        self.prefix = config.prefix
 
     def __repr__(self):
         return f'Clown record with {len(self.oligos)} oligos, {len(self.sequences)} sequences.'
@@ -98,13 +99,17 @@ class record:
                     fontdict={'weight': 'bold'}, long_form_translation=False)
         
     #### I/O
-    def find_gb(self, name, folder=None, extension='.gb'):
+    def find_gb(self, filename, folder=None, extension='.gb', name=None):
         '''Find a gb file that matches the name (with .gb extension), and import it as a sequence.'''
         if not folder:
             folder = self.folder
+
+        if not name:
+            name = filename
+
         for root, dirs, files in os.walk(folder):
-            if name+extension in files:
-                path = os.path.join(root, name+extension)
+            if filename+extension in files:
+                path = os.path.join(root, filename+extension)
                 print(f'Adding {path} as {name}.')
                 return self.add_gb(path, name=name)
         print(f'No matching file found with extension {extension}')
@@ -118,11 +123,14 @@ class record:
         else:
             return dseq
 
-    def write_gb(self, name, filename=None, folder='.'):
+    def write_gb(self, name, filename=None, folder=None):
         '''Write a sequence to a gb file.'''
         if not filename:
             filename = name
         fullname = str(pathlib.Path(folder) / filename) + '.gb'
+
+        if not folder:
+            folder = self.folder
 
         fragment = self.fragmentize(name)
         print(type(fragment))
@@ -550,13 +558,19 @@ class record:
 
         return (top_oligo, bottom_oligo)
 
-    def latest(self, prefix):
+    def latest(self, prefix=None):
         '''Looks at already existing oligos in the form `prefix+integer`, and finds what the next one should be.'''
+        if not prefix:
+            prefix = config.prefix
+
         indices = [int(i[len(prefix):]) for i in self.oligos.keys() if i[0:len(prefix)]==prefix]
         return prefix + str(max(indices)+1)
 
-    def new_oligos(self, oligos, prefix):
+    def new_oligos(self, oligos, prefix=None):
         '''Determines if each oligo from the list is new. If it is, finds a name for it in the form `prefix+integer`.'''
+        if not prefix:
+            prefix = self.prefix
+
         oligos = oligos if type(oligos) in [list,tuple] else [oligos]
         new = dict()
 
