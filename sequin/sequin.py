@@ -14,6 +14,8 @@ class record:
         self.sequences = sequences
         if not folder:
             self.folder = pathlib.Path(config.folder)
+        else:
+            self.folder = folder
         self.prefix = config.prefix
 
     def __repr__(self):
