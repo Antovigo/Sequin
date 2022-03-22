@@ -225,6 +225,10 @@ class record:
                     print(label + ': ' + str(i.location))
                     match.append(i)
 
+        if not match:
+            print('No feature found!')
+            return
+
         start = min([i.location.start for i in match])-margins[0]
         end = max([i.location.end for i in match])+margins[1]
         
