@@ -8,15 +8,18 @@ import sequin.config as config
 import os
 
 class record:
-    def __init__(self, oligos=dict(), sequences=dict()):
+    def __init__(self, oligos=dict(), sequences=dict(), folder=None):
         '''Create a new record. Oligos and sequences dicts can be provided already.'''
         self.oligos = oligos
         self.sequences = sequences
-        self.folder = pathlib.Path(config.folder)
+        if not folder:
+            self.folder = pathlib.Path(config.folder)
+        else:
+            self.folder = folder
         self.prefix = config.prefix
 
     def __repr__(self):
-        return f'Clown record with {len(self.oligos)} oligos, {len(self.sequences)} sequences.'
+        return f'Sequin record with {len(self.oligos)} oligos, {len(self.sequences)} sequences.'
 
     def fragmentize(self, name):
         '''Figure out if a parameter is a fragment name or a raw fragment variable, and returns the fragment.'''

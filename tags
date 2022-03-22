@@ -1,0 +1,46 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+__init__	sequin/sequin.py	/^    def __init__(self, oligos=dict(), sequences=dict(), folder=None):$/;"	m	class:record
+__repr__	sequin/sequin.py	/^    def __repr__(self):$/;"	m	class:record	file:
+add_gb	sequin/sequin.py	/^    def add_gb(self, filename, name=None, circular=True):$/;"	m	class:record
+add_oligos	sequin/sequin.py	/^    def add_oligos(self, filename, sep='\\t', header=True, name_col=0, seq_col=1):$/;"	m	class:record
+assemble	sequin/sequin.py	/^    def assemble(self, fragments, name=None,$/;"	m	class:record
+check_homology	sequin/sequin.py	/^    def check_homology(self, s1, s2, minimum=10, maximum=100, show_linker=True):$/;"	m	class:record
+clean_features	sequin/sequin.py	/^    def clean_features(self, name, verbose = True,$/;"	m	class:record
+default_color	sequin/config.py	/^default_color = '#f0f0f0'$/;"	v
+default_plot_width	sequin/config.py	/^default_plot_width = 14$/;"	v
+digest	sequin/sequin.py	/^    def digest(self, target, enzymes, fragment=0, name=None):$/;"	m	class:record
+find_features	sequin/sequin.py	/^    def find_features(self, name, targets, margins=(0,0), plot=True):$/;"	m	class:record
+find_gb	sequin/sequin.py	/^    def find_gb(self, filename, folder=None, extension='.gb', name=None):$/;"	m	class:record
+find_motif	sequin/sequin.py	/^    def find_motif(self, target, motif, strand):$/;"	m	class:record
+find_orfs	sequin/sequin.py	/^    def find_orfs(self, target, strand, min_length=300, start_codon='ATG', greedy=True):$/;"	m	class:record
+find_primers	sequin/sequin.py	/^    def find_primers(self, target, oligos=None,$/;"	m	class:record
+folder	sequin/config.py	/^folder = '\/mnt\/sysbio\/PAULSSON LAB\/Personal_Folders\/Antoine\/Cloning'$/;"	v
+fragmentize	sequin/sequin.py	/^    def fragmentize(self, name):$/;"	m	class:record
+latest	sequin/sequin.py	/^    def latest(self, prefix=None):$/;"	m	class:record
+ligate	sequin/sequin.py	/^    def ligate(self, fragments, name=None):$/;"	m	class:record
+list_features	sequin/sequin.py	/^    def list_features(self, name):$/;"	m	class:record
+make_junction	sequin/sequin.py	/^    def make_junction(self, left, right, linker=None, plot=True, homology=40):$/;"	m	class:record
+make_primers	sequin/sequin.py	/^    def make_primers(self, target, location, names=None, tm=58, lim=18,$/;"	m	class:record
+max_features	sequin/config.py	/^max_features = 100$/;"	v
+max_sequence_length	sequin/config.py	/^max_sequence_length = 2000$/;"	v
+min_primer_length	sequin/config.py	/^min_primer_length = 15$/;"	v
+new_feature	sequin/sequin.py	/^    def new_feature(self, sequence, location, strand, name, feature_type, force=False):$/;"	m	class:record
+new_oligos	sequin/sequin.py	/^    def new_oligos(self, oligos, prefix=None):$/;"	m	class:record
+pair	sequin/sequin.py	/^    def pair(self, o1, o2):$/;"	m	class:record
+pcr	sequin/sequin.py	/^    def pcr(self, template, F, R, name=None,$/;"	m	class:record
+point_mutation	sequin/sequin.py	/^    def point_mutation(self, template, mutation, name=None):$/;"	m	class:record
+prefix	sequin/config.py	/^prefix = 'V'$/;"	v
+primerize	sequin/sequin.py	/^    def primerize(self, oligo):$/;"	m	class:record
+record	sequin/sequin.py	/^class record:$/;"	c
+show_map	sequin/sequin.py	/^    def show_map(self, name, zoom=None, topology=None, width=config.default_plot_width):$/;"	m	class:record
+show_sequence	sequin/sequin.py	/^    def show_sequence(self, name, location, $/;"	m	class:record
+subset	sequin/sequin.py	/^    def subset(self, target, keys):$/;"	m	class:record
+tm	sequin/sequin.py	/^    def tm(self, primer):$/;"	m	class:record
+to_graphic_record	sequin/sequin.py	/^    def to_graphic_record(self, sequence, topology):$/;"	m	class:record
+verbose	sequin/config.py	/^verbose = False$/;"	v
+write_gb	sequin/sequin.py	/^    def write_gb(self, name, filename=None, folder=None):$/;"	m	class:record
