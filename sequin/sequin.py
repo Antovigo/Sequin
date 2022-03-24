@@ -549,7 +549,7 @@ class record:
     
     def make_primers(self, target, location, names=None, tm=58, lim=18,
             plot=True, plot_annealing=False, print_tm=False):
-        '''Creates a pair of primers to amplify the region `location` from target.'''
+        '''Creates a pair of primers to amplify the region <location> (a tuple of coordinates) from target.'''
         sequence = self.sequences[target] if type(target) == str else target
         
         start = location[0]
