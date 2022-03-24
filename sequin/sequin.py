@@ -166,26 +166,36 @@ class record:
 
     #### Features
     def clean_features(self, name, verbose = True,
+                       qualif = ['label','product'],
                        junk=['name','source'],
                        junk_types=['primer','primer_bind']):
         '''Remove features whose labels is in the junk list.'''
         sequence = self.sequences[name] if type(name)==str else name
         feats = sequence.features
         cleaned = []
+
         for i in feats:
             keep = True
-            if not 'label' in i.qualifiers.keys():
-                if verbose: print(f'Removing feature "{i}" that has no label.')
+            qualifs = [q for q in qualif if q in i.qualifiers.keys()]
+
+            if i.type in junk_types:
+                if verbose: print(f'Removing junk-type feature {i.qualifiers[qualifs[0]][0]}')
                 keep = False
-            elif i.qualifiers['label'][0] in junk:
-                if verbose: print(f'Removing junk feature "{i.qualifiers["label"][0]}".')
+
+            elif qualifs: 
+                if 'label' in qualifs:
+                    if i.qualifiers['label'][0] in junk:
+                        if verbose: print(f'Removing junk feature "{i.qualifiers[qualifs[0]][0]}".')
+                        keep = False
+            
+            else:
+                if verbose: print(f'Removing feature "{i}" that has no appropriate qualifier.')
                 keep = False
-            elif i.type in junk_types:
-                if verbose: print(f'Removing primer {i.qualifiers["label"][0]}')
-                keep = False
+
 
             if keep:
                 cleaned.append(i)
+
         if type(name)==str:
             self.sequences[name].features = cleaned
         else:
