@@ -220,7 +220,7 @@ class record:
         '''Find coordinates of a region englobing all matching features. 
         margins is a tuple giving how many base pairs to include before and after. 
         qualif are the qualifiers to look for in the feature.
-        Return a tuple of coordinates.'''
+        Return a tuple of coordinates. Case-sensitive.'''
         sequence = self.sequences[name] if type(name) == str else name
         targets = [targets] if type(targets) == str else targets
         
@@ -232,7 +232,7 @@ class record:
             if labels:
                 label = labels[0]
                 for j in targets:
-                    if j.lower() in label.lower():
+                    if j in label:
                         print(label + ': ' + str(i.location))
                         match.append(i)
 
