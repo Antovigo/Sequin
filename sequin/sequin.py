@@ -354,8 +354,19 @@ class record:
 
 
     #### Basic operations
+    def crop(self, original, boundaries, name = None):
+        '''Crops the <original> sequence to the region between <boundaries> (a tuple).'''
+        sequence = self.fragmentize(original)
+        cropped = sequence[boundaries[0]:boundaries[1]]
+
+        if name:
+            self.sequences[name] = cropped
+        else:
+            return cropped
+
+
     def pcr(self, template, F, R, name=None,
-            verbose=config.verbose, lim=config.min_primer_length):
+            lim=config.min_primer_length):
         '''Simulate a polymerase chain reaction.'''
         sequence = self.fragmentize(template)
        
