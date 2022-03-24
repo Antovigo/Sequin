@@ -2,7 +2,7 @@
 folder = '/mnt/sysbio/PAULSSON LAB/Personal_Folders/Antoine/Cloning'
 prefix = 'V'
 
-default_plot_width = 14
+default_plot_width = 16
 default_color = '#f0f0f0'
 
 max_features = 100

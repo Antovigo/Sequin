@@ -348,7 +348,7 @@ class record:
                 gr.features.append(gf(start=i.position+len(i.footprint), end=i.position,
                                      strand=+1, color='#c65423', label=i.name))
             if zoom: gr = gr.crop(zoom)
-            gr.plot()
+            gr.plot(width = config.default_plot_width)
 
         return anneal.report()
 
