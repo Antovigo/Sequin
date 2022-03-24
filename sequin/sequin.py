@@ -211,22 +211,30 @@ class record:
         for i in sequence.features:
             if 'label' in i.qualifiers.keys():
                 print (f'{i.qualifiers["label"][0]}: {i.location} ({i.type})')
+            elif 'product' in i.qualifiers.keys():
+                print (f'{i.qualifiers["product"][0]}: {i.location} ({i.type})')
             else:
                 print (i.type, i.qualifiers)
 
-    def find_features(self, name, targets, margins=(0,0), plot=True):
-        '''Find coordinates of a region englobing all matching features. margins is a tuple giving how many base pairs to include before and after. Return a tuple of coordinates.'''
+    def find_features(self, name, targets, margins=(0,0), plot=True, qualif=['label','product']):
+        '''Find coordinates of a region englobing all matching features. 
+        margins is a tuple giving how many base pairs to include before and after. 
+        qualif are the qualifiers to look for in the feature.
+        Return a tuple of coordinates.'''
         sequence = self.sequences[name] if type(name) == str else name
         targets = [targets] if type(targets) == str else targets
         
-        features = [i for i in sequence.features if 'label' in i.qualifiers.keys()]
         match = []
-        for i in features:
-            for j in targets:
-                label = i.qualifiers['label'][0]
-                if j in label:
-                    print(label + ': ' + str(i.location))
-                    match.append(i)
+
+        for i in sequence.features:
+            labels = [i.qualifiers[q][0] for q in qualif if q in i.qualifiers.keys()]
+
+            if labels:
+                label = labels[0]
+                for j in targets:
+                    if j.lower() in label.lower():
+                        print(label + ': ' + str(i.location))
+                        match.append(i)
 
         if not match:
             print('No feature found!')
