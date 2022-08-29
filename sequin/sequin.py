@@ -194,26 +194,36 @@ class record:
 
     #### Features
     def clean_features(self, name, verbose = True,
+                       qualif = ['label','product'],
                        junk=['name','source'],
                        junk_types=['primer','primer_bind']):
         '''Remove features whose labels is in the junk list.'''
         sequence = self.sequences[name] if type(name)==str else name
         feats = sequence.features
         cleaned = []
+
         for i in feats:
             keep = True
-            if not 'label' in i.qualifiers.keys():
-                if verbose: print(f'Removing feature "{i}" that has no label.')
+            qualifs = [q for q in qualif if q in i.qualifiers.keys()]
+
+            if i.type in junk_types:
+                if verbose: print(f'Removing junk-type feature {i.qualifiers[qualifs[0]][0]}')
                 keep = False
-            elif i.qualifiers['label'][0] in junk:
-                if verbose: print(f'Removing junk feature "{i.qualifiers["label"][0]}".')
+
+            elif qualifs: 
+                if 'label' in qualifs:
+                    if i.qualifiers['label'][0] in junk:
+                        if verbose: print(f'Removing junk feature "{i.qualifiers[qualifs[0]][0]}".')
+                        keep = False
+            
+            else:
+                if verbose: print(f'Removing feature "{i}" that has no appropriate qualifier.')
                 keep = False
-            elif i.type in junk_types:
-                if verbose: print(f'Removing primer {i.qualifiers["label"][0]}')
-                keep = False
+
 
             if keep:
                 cleaned.append(i)
+
         if type(name)==str:
             self.sequences[name].features = cleaned
         else:
@@ -239,22 +249,34 @@ class record:
         for i in sequence.features:
             if 'label' in i.qualifiers.keys():
                 print (f'{i.qualifiers["label"][0]}: {i.location} ({i.type})')
+            elif 'product' in i.qualifiers.keys():
+                print (f'{i.qualifiers["product"][0]}: {i.location} ({i.type})')
             else:
                 print (i.type, i.qualifiers)
 
-    def find_features(self, name, targets, margins=(0,0), plot=True):
-        '''Find coordinates of a region englobing all matching features. margins is a tuple giving how many base pairs to include before and after. Return a tuple of coordinates.'''
+    def find_features(self, name, targets, margins=(0,0), plot=True, qualif=['label','product']):
+        '''Find coordinates of a region englobing all matching features. 
+        margins is a tuple giving how many base pairs to include before and after. 
+        qualif are the qualifiers to look for in the feature.
+        Return a tuple of coordinates. Case-sensitive.'''
         sequence = self.sequences[name] if type(name) == str else name
         targets = [targets] if type(targets) == str else targets
         
-        features = [i for i in sequence.features if 'label' in i.qualifiers.keys()]
         match = []
-        for i in features:
-            for j in targets:
-                label = i.qualifiers['label'][0]
-                if j in label:
-                    print(label + ': ' + str(i.location))
-                    match.append(i)
+
+        for i in sequence.features:
+            labels = [i.qualifiers[q][0] for q in qualif if q in i.qualifiers.keys()]
+
+            if labels:
+                label = labels[0]
+                for j in targets:
+                    if j in label:
+                        print(label + ': ' + str(i.location))
+                        match.append(i)
+
+        if not match:
+            print('No feature found!')
+            return
 
         start = min([i.location.start for i in match])-margins[0]
         end = max([i.location.end for i in match])+margins[1]
@@ -354,14 +376,25 @@ class record:
                 gr.features.append(gf(start=i.position+len(i.footprint), end=i.position,
                                      strand=+1, color='#c65423', label=i.name))
             if zoom: gr = gr.crop(zoom)
-            gr.plot()
+            gr.plot(figure_width = config.default_plot_width)
 
         return anneal.report()
 
 
     #### Basic operations
+    def crop(self, original, boundaries, name = None):
+        '''Crops the <original> sequence to the region between <boundaries> (a tuple).'''
+        sequence = self.fragmentize(original)
+        cropped = sequence[boundaries[0]:boundaries[1]]
+
+        if name:
+            self.sequences[name] = cropped
+        else:
+            return cropped
+
+
     def pcr(self, template, F, R, name=None,
-            verbose=config.verbose, lim=config.min_primer_length):
+            lim=config.min_primer_length):
         '''Simulate a polymerase chain reaction.'''
         sequence = self.fragmentize(template)
        
@@ -544,7 +577,7 @@ class record:
     
     def make_primers(self, target, location, names=None, tm=58, lim=18,
             plot=True, plot_annealing=False, print_tm=False):
-        '''Creates a pair of primers to amplify the region `location` from target.'''
+        '''Creates a pair of primers to amplify the region <location> (a tuple of coordinates) from target.'''
         sequence = self.sequences[target] if type(target) == str else target
         
         start = location[0]
