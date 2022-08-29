@@ -2,6 +2,7 @@
 
 import pydna.all
 import Bio
+import Bio.pairwise2 as pw2
 import dna_features_viewer
 import pathlib
 import sequin.config as config
@@ -21,6 +22,7 @@ class record:
     def __repr__(self):
         return f'Sequin record with {len(self.oligos)} oligos, {len(self.sequences)} sequences.'
 
+    ### Utilities
     def fragmentize(self, name):
         '''Figure out if a parameter is a fragment name or a raw fragment variable, and returns the fragment.'''
         sequence = self.sequences[name] if type(name) == str else name
@@ -101,7 +103,7 @@ class record:
             graphic_record.plot_translation(ax, translate,
                     fontdict={'weight': 'bold'}, long_form_translation=False)
         
-    #### I/O
+    ### I/O
     def find_gb(self, filename, folder=None, extension='.gb', name=None):
         '''Find a gb file that matches the name (with .gb extension), and import it as a sequence.'''
         if not folder:
@@ -160,6 +162,32 @@ class record:
                         self.oligos[ls[name_col].strip()] = ls[seq_col].strip()
             print(f'Found new {count} oligos ({existing} existing).')
     
+    def read_ab1(self, path):
+        '''Open an ab1 file.'''
+        return Bio.SeqIO.read(path, 'abi')
+
+    def find_ab1(self, pattern, folder=None, extension='ab1'):
+        '''Find and Open ab1 files. The <pattern> must be contained in the filename.'''
+        if not folder:
+            folder = self.folder
+
+        results = []
+        print('Sequences traces:')
+        for root, dirs, files in os.walk(folder):
+            for name in files:
+                if pattern in name and name[-len(extension):]==extension:
+                    path = os.path.join(root, name)
+                    print(path)
+                    results.append(path)
+
+        if len(results) == 0:
+            print(f'No matching file in {folder}.')
+        elif len(results) == 1:
+            return self.read_ab1(results[0])
+        else:
+            return [self.read_ab1(i) for i in results]
+                
+
     def subset(self, target, keys):
         '''Returns the subset of a dictionary with only the specified keys.'''
         return {key:value for key,value in target.items() if key in keys}
