@@ -2,13 +2,15 @@
 
 import pydna.all
 import Bio
-import Bio.pairwise2 as pw2
 import dna_features_viewer
 import pathlib
 import sequin.config as config
 import os
 
 class record:
+    '''Cloning records. Contains a dict of DNA fragments (linear or circular) and
+    a dict of oligos.'''
+
     def __init__(self, oligos=dict(), sequences=dict(), folder=None):
         '''Create a new record. Oligos and sequences dicts can be provided already.'''
         self.oligos = oligos
@@ -605,7 +607,7 @@ class record:
         else:
             return f.seq,r.seq
 
-    def make_junction(self, left, right, linker=None, plot=True, homology=40):
+    def make_junction(self, left, right, linker=None, homology=40):
         '''Design tailed oligos for homology-based assembly. Input is 1) the reverse primer of the first fragment, 2) the forward primer of the second fragment, 3) optionally a linker to insert between the two fragments.'''
         if not linker:
             linker = ''

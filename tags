@@ -32,7 +32,7 @@ fragmentize	sequin/sequin.py	/^    def fragmentize(self, name):$/;"	m	class:reco
 latest	sequin/sequin.py	/^    def latest(self, prefix=None):$/;"	m	class:record
 ligate	sequin/sequin.py	/^    def ligate(self, fragments, name=None):$/;"	m	class:record
 list_features	sequin/sequin.py	/^    def list_features(self, name):$/;"	m	class:record
-make_junction	sequin/sequin.py	/^    def make_junction(self, left, right, linker=None, plot=True, homology=40):$/;"	m	class:record
+make_junction	sequin/sequin.py	/^    def make_junction(self, left, right, linker=None, homology=40):$/;"	m	class:record
 make_primers	sequin/sequin.py	/^    def make_primers(self, target, location, names=None, tm=58, lim=18,$/;"	m	class:record
 max_features	sequin/config.py	/^max_features = 100$/;"	v
 max_sequence_length	sequin/config.py	/^max_sequence_length = 2000$/;"	v
@@ -44,7 +44,6 @@ pcr	sequin/sequin.py	/^    def pcr(self, template, F, R, name=None,$/;"	m	class:
 point_mutation	sequin/sequin.py	/^    def point_mutation(self, template, mutation, name=None):$/;"	m	class:record
 prefix	sequin/config.py	/^prefix = 'V'$/;"	v
 primerize	sequin/sequin.py	/^    def primerize(self, oligo):$/;"	m	class:record
-pw2	sequin/sequin.py	/^import Bio.pairwise2 as pw2$/;"	I	nameref:module:Bio.pairwise2
 read_ab1	sequin/sequin.py	/^    def read_ab1(self, path):$/;"	m	class:record
 record	sequin/sequin.py	/^class record:$/;"	c
 show_map	sequin/sequin.py	/^    def show_map(self, name, zoom=None, topology=None, width=config.default_plot_width):$/;"	m	class:record
