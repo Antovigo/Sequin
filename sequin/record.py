@@ -605,13 +605,13 @@ def make_primers(target, location, names=None, target_tm=58, lim=18,
     else:
         return f.seq,r.seq
 
-def make_junction(left, right, linker=None, homology=40):
+def make_junction(forward, reverse, linker=None, homology=40):
     '''Design tailed oligos for homology-based assembly. Input is 1) the reverse primer of the first fragment, 2) the forward primer of the second fragment, 3) optionally a linker to insert between the two fragments.'''
     if not linker:
         linker = ''
 
-    top = Bio.Seq.reverse_complement(left).lower() + linker.lower() + right.upper()
-    bottom = Bio.Seq.reverse_complement(right).lower() + Bio.Seq.reverse_complement(linker).lower() + left.upper()
+    top = Bio.Seq.reverse_complement(forward).lower() + linker.lower() + reverse.upper()
+    bottom = Bio.Seq.reverse_complement(reverse).lower() + Bio.Seq.reverse_complement(linker).lower() + forward.upper()
 
     # Trim the oligos if they are longer than necessary, and equilibrate lengths
     trim = max(0,round((len(top)-homology)/2))
