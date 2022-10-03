@@ -610,8 +610,8 @@ def make_junction(forward, reverse, linker=None, homology=40):
     if not linker:
         linker = ''
 
-    top = Bio.Seq.reverse_complement(forward).lower() + linker.lower() + reverse.upper()
-    bottom = Bio.Seq.reverse_complement(reverse).lower() + Bio.Seq.reverse_complement(linker).lower() + forward.upper()
+    top = Bio.Seq.reverse_complement(reverse).lower() + linker.lower() + forward.upper()
+    bottom = Bio.Seq.reverse_complement(forward).lower() + Bio.Seq.reverse_complement(linker).lower() + reverse.upper()
 
     # Trim the oligos if they are longer than necessary, and equilibrate lengths
     trim = max(0,round((len(top)-homology)/2))
