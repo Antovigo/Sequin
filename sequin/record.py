@@ -270,7 +270,7 @@ def find_features(name, targets, margins=(0,0), plot=True, qualif=['label','prod
         if labels:
             label = labels[0]
             for target in targets:
-                if target.strip().to_lower() in label.strip().to_lower():
+                if target.strip().lower() in label.strip().lower():
                     print(label + ': ' + str(i.location))
                     match.append(i)
 
