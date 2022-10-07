@@ -146,12 +146,21 @@ def write_gb(name, filename=None, folder=None):
     else:
         print ('Input should be Dseqrecord or String')
 
-def add_oligos(filename, sep='\t', header=True, name_col=0, seq_col=1):
+def add_oligos(filename, sep='\t', header=True, name_col=0, seq_col=1, reinitialize=False):
     '''Parse oligos from a tsv format'''
+
+    # If requested, clear the current oligo record
+    if reinitialize:
+        oligos = dict()
+
+    # Open the oligo file
     with open(filename,'r') as data:
+        # Skip the column name line
         if header:
-            next(data) # Skip colnames line
-        count,existing = 0,0
+            next(data)
+
+        count,existing = 0,0 # Count: new oligos, existing: already in the record
+
         for line in data:
             if line != '\n':
                 ls = line.split(sep)
@@ -159,8 +168,8 @@ def add_oligos(filename, sep='\t', header=True, name_col=0, seq_col=1):
                     existing += 1
                 else:
                     count += 1
-                    oligos[ls[name_col].strip()] = ls[seq_col].strip()
-        print(f'Found new {count} oligos ({existing} existing).')
+                    oligos[ls[name_col].strip()] = ls[seq_col].strip() # Add new oligo to dict
+        print(f'Found new {count} oligos ({existing} already present).')
 
 def read_ab1(path):
     '''Open an ab1 file.'''
