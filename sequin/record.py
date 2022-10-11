@@ -7,16 +7,6 @@ import pathlib
 import sequin.config as config
 import os
 
-# def __init__(oligos=dict(), sequences=dict(), folder=None):
-    # '''Create a new record. Oligos and sequences dicts can be provided already.'''
-    # oligos = oligos
-    # sequences = sequences
-    # if not folder:
-        # folder = pathlib.Path(config.folder)
-    # else:
-        # folder = folder
-    # prefix = config.prefix
-
 oligos = dict()
 sequences = dict()
 prefix = config.prefix
