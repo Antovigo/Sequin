@@ -141,7 +141,7 @@ def add_oligos(filename, sep='\t', header=True, name_col=0, seq_col=1, reinitial
 
     # If requested, clear the current oligo record
     if reinitialize:
-        oligos = dict()
+        oligos.clear()
 
     # Open the oligo file
     with open(filename,'r') as data:
