@@ -284,19 +284,29 @@ def find_features(name, targets, margins=(0,0), plot=True, qualif=['label','prod
         show_map(sequence, zoom=(start,end))
     return (start, end)
 
-def find_motif(target, motif, strand):
+def find_motif(target, motif, strand = 0):
     '''Find all occurences of a given DNA motif in a DNA strand.'''
     sequence = sequences[target] if type(target) == str else target
-    # Reverse the motif if necessary
-    if strand==-1: motif = Bio.Seq.Seq(motif).reverse_complement()
 
     # Format the strings correctly
     motif = str(motif).upper()
     sequence = str(sequence.seq).upper()
 
     # Do the search
-    return Bio.SeqUtils.nt_search(sequence, motif)[1:]
+    if strand != -1:
+        top = Bio.SeqUtils.nt_search(sequence, motif)[1:]
+        top_locations = [(i, i + len(motif), 1) for i in top]
+    else:
+        top_locations = []
 
+    if strand != 1:
+        revcom = Bio.Seq.Seq(motif).reverse_complement()
+        bottom = Bio.SeqUtils.nt_search(sequence, revcom)[1:]
+        bottom_locations = [(i, i + len(motif), -1) for i in bottom]
+    else:
+        bottom_locations = []
+
+    return top_locations + bottom_locations
 
 def find_orfs(target, strand, min_length=300, start_codon='ATG', greedy=True):
     '''Detect ORFs in the strand. Returns the first and last nucleotides' coordinates.
