@@ -40,7 +40,7 @@ def to_graphic_record(sequence, topology):
 
 def show_map(name, zoom=None, topology=None, width=config.default_plot_width):
     '''Display a map of a DNA fragment in Dseqrecord format.'''
-    sequence = sequences[name] if type(name) == str else name
+    sequence = fragmentize(name)
     if not topology:
         if zoom or not sequence.circular:
             topology = 'linear'
@@ -56,13 +56,13 @@ def show_map(name, zoom=None, topology=None, width=config.default_plot_width):
         print (f'Too many features ({len(sequence.features)}) to be plotted. Try cropping or increasing the maximum.')
         return
     
-    ax,_ = graphic_record.plot(figure_width=width)
+    graphic_record.plot(figure_width=width)
 
 def show_sequence(name, location, 
                   width=config.default_plot_width,
                   highlight=None, translate=None, strand=+1):
     '''Zoom on a part of the sequence with the "location" coordinates.'''
-    sequence = sequences[name] if type(name) == str else name
+    sequence = fragmentize(name)
 
     if location[1]-location[0] > config.max_sequence_length:
         print (f'Sequence too long to be displayed.')
@@ -102,7 +102,7 @@ def find_gb(filename, folder=None, extension='.gb', name=None):
     if not name:
         name = filename
 
-    for root, dirs, files in os.walk(folder):
+    for root, _, files in os.walk(folder):
         if filename+extension in files:
             path = os.path.join(root, filename+extension)
             print(f'Adding {path} as {name}.')
@@ -172,7 +172,7 @@ def find_ab1(pattern, folder=None, extension='ab1'):
 
     results = []
     print('Sequences traces:')
-    for root, dirs, files in os.walk(folder):
+    for root, _, files in os.walk(folder):
         for name in files:
             if pattern in name and name[-len(extension):]==extension:
                 path = os.path.join(root, name)
@@ -197,7 +197,7 @@ def clean_features(name, verbose = True,
                    junk=['name','source'],
                    junk_types=['primer','primer_bind']):
     '''Remove features whose labels is in the junk list.'''
-    sequence = sequences[name] if type(name)==str else name
+    sequence = fragmentize(name)
     feats = sequence.features
     cleaned = []
 
@@ -244,7 +244,8 @@ def new_feature(sequence, location, strand, name, feature_type, force=False):
 
 def list_features(name):
     '''List features of a sequence.'''
-    sequence = sequences[name] if type(name) == str else name
+    sequence = fragmentize(name)
+
     for i in sequence.features:
         if 'label' in i.qualifiers.keys():
             print (f'{i.qualifiers["label"][0]}: {i.location} ({i.type})')
@@ -258,8 +259,8 @@ def find_features(name, targets, margins=(0,0), plot=True, qualif=['label','prod
     margins is a tuple giving how many base pairs to include before and after. 
     qualif are the qualifiers to look for in the feature.
     Return a tuple of coordinates. Case-sensitive.'''
-    sequence = sequences[name] if type(name) == str else name
-    targets = [targets] if type(targets) == str else targets
+    sequence = fragmentize(name)
+    targets = fragmentize(targets)
     
     match = []
 
@@ -286,7 +287,7 @@ def find_features(name, targets, margins=(0,0), plot=True, qualif=['label','prod
 
 def find_motif(target, motif, strand = 0):
     '''Find all occurences of a given DNA motif in a DNA strand.'''
-    sequence = sequences[target] if type(target) == str else target
+    sequence = fragmentize(target)
 
     # Format the strings correctly
     motif = str(motif).upper()
@@ -295,14 +296,14 @@ def find_motif(target, motif, strand = 0):
     # Do the search
     if strand != -1:
         top = Bio.SeqUtils.nt_search(sequence, motif)[1:]
-        top_locations = [(i, i + len(motif), 1) for i in top]
+        top_locations = [[i, i + len(motif), 1] for i in top]
     else:
         top_locations = []
 
     if strand != 1:
         revcom = Bio.Seq.Seq(motif).reverse_complement()
         bottom = Bio.SeqUtils.nt_search(sequence, revcom)[1:]
-        bottom_locations = [(i, i + len(motif), -1) for i in bottom]
+        bottom_locations = [[i, i + len(motif), -1] for i in bottom]
     else:
         bottom_locations = []
 
@@ -311,7 +312,7 @@ def find_motif(target, motif, strand = 0):
 def find_orfs(target, strand, min_length=300, start_codon='ATG', greedy=True):
     '''Detect ORFs in the strand. Returns the first and last nucleotides' coordinates.
     Greedy mode will only return the longest ORF associated with each stop codon.'''
-    sequence = sequences[target] if type(target) == str else target
+    sequence = fragmentize(target)
     
     # Check strand
     if strand not in [-1,1]:
@@ -320,12 +321,12 @@ def find_orfs(target, strand, min_length=300, start_codon='ATG', greedy=True):
     if strand==-1: sequence = sequence.reverse_complement()
 
     # Find start codons
-    start_codons = find_motif(sequence, start_codon, +1)
+    start_codons = [i[0] for i in find_motif(sequence, start_codon, strand = +1)]
 
     orfs = []
     # Find ORFs
     for i in start_codons:
-        endpoint = (len(sequence)-i-1)%3 + 1
+        endpoint = (len(sequence) - i - 1)%3 + 1
         protein = sequence[i:-endpoint].translate()
         stop = i+(protein.seq.find('*')+1)*3
         if stop-i >= min_length:
@@ -348,7 +349,7 @@ def find_primers(target, oligos_list = None,
                  plot=True, zoom=None, 
                  lim=config.min_primer_length):
     '''Find primers that bind on a given target sequence. If oligos are not specified, use the record's oligo dict. Otherwise, oligos can be provided as a dict, a list/tuple, or a single oligo.'''
-    sequence = sequences[target] if type(target) == str else target
+    sequence = fragmentize(target)
     
     # If oligos are not specified, used the stored dict
     oligos_list = oligos if not oligos_list else oligos
@@ -374,7 +375,6 @@ def find_primers(target, oligos_list = None,
 
     # Plot the map with the primers on top
     if plot:
-        ft_size = len(sequence)*0.1
         gr = to_graphic_record(sequence, 'linear')
 
         gf = dna_features_viewer.GraphicFeature
@@ -407,7 +407,6 @@ def pcr(template, F, R, name=None,
     '''Simulate a polymerase chain reaction.'''
     sequence = fragmentize(template)
    
-    pr = pydna.primer.Primer
     oF = primerize(F)
     oR = primerize(R)
     oF.name = F
@@ -460,7 +459,7 @@ def digest(target, enzymes, fragment=0, name=None):
 
 def point_mutation(template, mutation, name=None):
     '''Introduces a point mutation in a sequence. Input is a string: <before><position><after>.'''
-    sequence = sequences[template] if type(template) == str else template
+    sequence = fragmentize(template)
     
     if type(mutation) != str:
         print ('`mutation` should be a string: <before><position><after>.')
@@ -587,7 +586,7 @@ def tm(primer):
 def make_primers(target, location, names=None, target_tm=58, lim=18,
         plot=True, plot_annealing=False, print_tm=False):
     '''Creates a pair of primers to amplify the region <location> (a tuple of coordinates) from target.'''
-    sequence = sequences[target] if type(target) == str else target
+    sequence = fragmentize(target)
     
     start = location[0]
     end = location[1]
