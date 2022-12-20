@@ -58,20 +58,25 @@ def show_map(name, zoom=None, topology=None, width=config.default_plot_width):
     
     graphic_record.plot(figure_width=width)
 
-def show_sequence(name, location, 
-                  width=config.default_plot_width,
-                  highlight=None, translate=None, strand=+1):
+def show_sequence(name, 
+                  location = None, 
+                  width = config.default_plot_width,
+                  highlight = None, translate = None, strand=+1):
     '''Zoom on a part of the sequence with the "location" coordinates.'''
     sequence = fragmentize(name)
 
-    if location[1]-location[0] > config.max_sequence_length:
+    if location:
+        sub = sequence.crop(location)
+    else:
+        sub = sequence
+
+    if len(sub) > config.max_sequence_length:
         print (f'Sequence too long to be displayed.')
         return
 
     if strand == -1:
         sequence = sequence.reverse_complement()
         l = len(sequence)
-        location = (l-location[1],l-location[0])
         if highlight:
             highlight = (l-highlight[1],l-highlight[0])
         if translate:
@@ -79,7 +84,7 @@ def show_sequence(name, location,
 
     translator = dna_features_viewer.BiopythonTranslator()
     translator.default_feature_color = config.default_color
-    graphic_record = translator.translate_record(sequence,'linear').crop(location)
+    graphic_record = translator.translate_record(sequence,'linear')
     ax,_ = graphic_record.plot(figure_width=width, plot_sequence=True)
 
     if highlight:
