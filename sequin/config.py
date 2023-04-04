@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-folder = '/mnt/sysbio/PAULSSON LAB/Personal_Folders/Antoine/Cloning'
-prefix = 'V'
+folder = 'your/working/folder'
+prefix = 'your prefix'
 
 default_plot_width = 20
 default_color = '#f0f0f0'
