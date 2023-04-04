@@ -29,6 +29,21 @@ def primerize(oligo):
     else:
         return pr(oligo) # Just in case
 
+
+def crop(original, boundaries, name = None):
+    '''Crops the <original> sequence to the region between <boundaries> (a tuple).'''
+    sequence = fragmentize(original)
+    cropped = sequence[boundaries[0]:boundaries[1]]
+
+    if name:
+        sequences[name] = cropped
+    else:
+        return cropped
+
+def pad(location, upstream, downstream):
+    '''Extends a tuple of DNA coordinates by specified number of bases.'''
+    return location[0] - upstream, location[1] + downstream
+
 ### Plotting
 def to_graphic_record(sequence, topology):
     '''Make a graphic record from a sequence.'''
@@ -396,16 +411,6 @@ def find_primers(target, oligos_list = None,
 
 
 #### Basic operations
-def crop(original, boundaries, name = None):
-    '''Crops the <original> sequence to the region between <boundaries> (a tuple).'''
-    sequence = fragmentize(original)
-    cropped = sequence[boundaries[0]:boundaries[1]]
-
-    if name:
-        sequences[name] = cropped
-    else:
-        return cropped
-
 
 def pcr(template, F, R, name=None,
         lim=config.min_primer_length):
