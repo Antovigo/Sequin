@@ -19,6 +19,7 @@ def fragmentize(name):
     return sequence
  
 def primerize(oligo):
+    '''Convert an oligo to the pydna oligo class.'''
     pr = pydna.primer.Primer
 
     if type(oligo) == str:
@@ -41,12 +42,12 @@ def crop(original, boundaries, name = None):
         return cropped
 
 def pad(location, upstream, downstream):
-    '''Extends a tuple of DNA coordinates by specified number of bases.'''
+    '''Extends a tuple of DNA coordinates by specified number of bases upstream and downstream.'''
     return location[0] - upstream, location[1] + downstream
 
 ### Plotting
 def to_graphic_record(sequence, topology):
-    '''Make a graphic record from a sequence.'''
+    '''Make a DNA_features_viewer graphic record from a sequence.'''
     translator = dna_features_viewer.BiopythonTranslator()
     translator.default_feature_color = config.default_color
     
@@ -77,7 +78,10 @@ def show_sequence(name,
                   location = None, 
                   width = config.default_plot_width,
                   highlight = None, translate = None, strand=+1):
-    '''Zoom on a part of the sequence with the "location" coordinates.'''
+    '''Zoom on a part of the sequence with the <location> coordinates.
+    If <highlight> is set to a tuple of coordinates, this part of the sequence is highlighted.
+    If <translate> is set to a tuple of coordinates, the sequence is translated to aminoacids.
+    If <strand> is set to -1, the reverse-complement is shown.'''
     sequence = fragmentize(name)
 
     if location:
@@ -454,6 +458,12 @@ def pair(o1, o2):
 
 
 def digest(target, enzymes, fragment=0, name=None):
+    '''
+    Simulates the digestion of the <target> sequence by the specified list of enzymes.
+    By default, returns the first fragment, but another one can be specified with
+    the <fragment> argument.
+    '''
+
     rb = Bio.Restriction.RestrictionBatch(enzymes)
     product = sequences[target].cut(rb)
 
@@ -510,8 +520,9 @@ def check_homology(s1, s2, minimum=10, maximum=100, show_linker=True):
     return 0
 
 def assemble(fragments, name=None,
-           lim=config.min_primer_length, verbose=config.verbose, skip_check=False):
-    '''Simulate isothermal homology-based assemblies like Gibson's.'''
+           lim = config.min_primer_length, verbose=config.verbose, skip_check=False):
+    '''Simulate isothermal homology-based assemblies like Gibson's. Homologous regions must
+    be at least <lim> bp long.'''
     fragments_seq = []
     for i in fragments:
         fragment = sequences[i] if type(i)==str else i
@@ -590,7 +601,7 @@ def ligate(fragments, name=None):
 
 #### Design
 def tm(primer):
-    '''Estimates the melting point of a primer.'''
+    '''Estimates the melting point of a primer. This is just an easy to remember wrapper to pydna.'''
     return round(pydna.tm.tm_default(primer),2)
 
 def make_primers(target, location, names=None, target_tm=58, lim=18,
