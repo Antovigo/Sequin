@@ -74,28 +74,20 @@ def show_map(name, zoom=None, topology=None, width=config.default_plot_width):
     
     graphic_record.plot(figure_width=width)
 
-def show_sequence(name, 
-                  location = None, 
-                  width = config.default_plot_width,
-                  highlight = None, translate = None, strand=+1):
-    '''Zoom on a part of the sequence with the <location> coordinates.
-    If <highlight> is set to a tuple of coordinates, this part of the sequence is highlighted.
-    If <translate> is set to a tuple of coordinates, the sequence is translated to aminoacids.
-    If <strand> is set to -1, the reverse-complement is shown.'''
-    sequence = fragmentize(name)
+def show_sequence(name, location, 
+                  width=config.default_plot_width,
+                  highlight=None, translate=None, strand=+1):
+    '''Zoom on a part of the sequence with the "location" coordinates.'''
+    sequence = sequences[name] if type(name) == str else name
 
-    if location:
-        sub = sequence.crop(location)
-    else:
-        sub = sequence
-
-    if len(sub) > config.max_sequence_length:
+    if location[1]-location[0] > config.max_sequence_length:
         print (f'Sequence too long to be displayed.')
         return
 
     if strand == -1:
         sequence = sequence.reverse_complement()
         l = len(sequence)
+        location = (l-location[1],l-location[0])
         if highlight:
             highlight = (l-highlight[1],l-highlight[0])
         if translate:
@@ -103,7 +95,7 @@ def show_sequence(name,
 
     translator = dna_features_viewer.BiopythonTranslator()
     translator.default_feature_color = config.default_color
-    graphic_record = translator.translate_record(sequence,'linear')
+    graphic_record = translator.translate_record(sequence,'linear').crop(location)
     ax,_ = graphic_record.plot(figure_width=width, plot_sequence=True)
 
     if highlight:
@@ -116,7 +108,7 @@ def show_sequence(name,
             translate = (translate[0], translate[1]-excess)
         graphic_record.plot_translation(ax, translate,
                 fontdict={'weight': 'bold'}, long_form_translation=False)
-    
+
 ### I/O
 def find_gb(filename, folder=None, extension='.gb', name=None):
     '''Find a gb file that matches the name (with .gb extension), and import it as a sequence.'''
@@ -283,8 +275,10 @@ def find_features(name, targets, margins=(0,0), plot=True, qualif=['label','prod
     margins is a tuple giving how many base pairs to include before and after. 
     qualif are the qualifiers to look for in the feature.
     Return a tuple of coordinates. Case-sensitive.'''
+
     sequence = fragmentize(name)
-    targets = fragmentize(targets)
+    if type(targets) != list:
+        targets = [targets]
     
     match = []
 
@@ -302,8 +296,8 @@ def find_features(name, targets, margins=(0,0), plot=True, qualif=['label','prod
         print('No feature found!')
         return
 
-    start = min([i.location.start for i in match])-margins[0]
-    end = max([i.location.end for i in match])+margins[1]
+    start = min([i.location.start for i in match]) - margins[0]
+    end = max([i.location.end for i in match]) + margins[1]
     
     if plot:
         show_map(sequence, zoom=(start,end))
@@ -376,7 +370,7 @@ def find_primers(target, oligos_list = None,
     sequence = fragmentize(target)
     
     # If oligos are not specified, used the stored dict
-    oligos_list = oligos if not oligos_list else oligos
+    oligos_list = oligos if not oligos_list else oligos_list
         
     # Convert to dict
     if type(oligos_list) != dict:
@@ -608,7 +602,7 @@ def make_primers(target, location, names=None, target_tm=58, lim=18,
         plot=True, plot_annealing=False, print_tm=False):
     '''Creates a pair of primers to amplify the region <location> (a tuple of coordinates) from target.'''
     sequence = fragmentize(target)
-    
+
     start = location[0]
     end = location[1]
     template = sequence[start:end]
@@ -616,14 +610,14 @@ def make_primers(target, location, names=None, target_tm=58, lim=18,
     amplicon = pydna.all.primer_design(template, target_tm=target_tm, limit=lim)
     f = amplicon.forward_primer
     r = amplicon.reverse_primer
-    
+
     if plot:
         show_map(amplicon)
     if plot_annealing:
         show_sequence(sequence, (max(0,start-20),start+len(r)+20), 
-                           highlight=(start,start+len(f)))
+                highlight=(start,start+len(f)))
         show_sequence(sequence, (end-len(r)-20, min(len(sequence),end+20)),
-                           highlight=(end-len(r),end))
+                highlight=(end-len(r),end))
     if print_tm:
         print(f'F: {f.seq} (Tm={tm(f.seq)})')
         print(f'R: {r.seq} (Tm={tm(r.seq)})')
